@@ -1,0 +1,16 @@
+ccargo-features = ["open-namespaces"]
+
+[package]
+name = "kourain_macro"
+version = "1.0.1"
+edition = "2024"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "2" }
+quote = "1"
+proc-macro2 = "1"
+bytebuffer = "2"
+regex = "1"

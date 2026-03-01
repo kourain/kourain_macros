@@ -1,0 +1,4 @@
+# rust
+target/
+cargo.lock
+test*.ipynb
