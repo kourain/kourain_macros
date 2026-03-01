@@ -4,6 +4,14 @@ ccargo-features = ["open-namespaces"]
 name = "kourain_macro"
 version = "1.0.1"
 edition = "2024"
+authors = ["kourain <maiquyen16503@gmail.com>"]
+license = "MIT OR Apache-2.0"
+description = "kourain extensions helper"
+readme = "README.md"
+homepage = "https://github.com/kourain/kourain_macros"
+repository = "https://github.com/kourain/kourain_cores"
+keywords = ["kourain"]
+categories = ["command-line-utilities"]
 
 [lib]
 proc-macro = true
