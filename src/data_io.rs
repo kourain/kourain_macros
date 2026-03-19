@@ -293,28 +293,28 @@ fn create_write(
     };
     match maintype.to_lowercase().as_str() {
         "string" => quote! {
-            doc.write_string(&self.#field_ident);
+            doc.push_string(&self.#field_ident);
         },
         "bool" => quote! {
-            doc.write_i8(if self.#field_ident { 1 } else { 0 });
+            doc.push_i8(if self.#field_ident { 1 } else { 0 });
         },
         "i8" => quote! {
-            doc.write_i8(self.#field_ident);
+            doc.push_i8(self.#field_ident);
         },
         "u8" => quote! {
-            doc.write_u8(self.#field_ident);
+            doc.push_u8(self.#field_ident);
         },
         "i32" => quote! {
-            doc.write_i32(self.#field_ident);
+            doc.push_i32(self.#field_ident);
         },
         "u32" => quote! {
-            doc.write_u32(self.#field_ident);
+            doc.push_u32(self.#field_ident);
         },
         "i64" => quote! {
-            doc.write_i64(self.#field_ident);
+            doc.push_i64(self.#field_ident);
         },
         "u64" => quote! {
-            doc.write_u64(self.#field_ident);
+            doc.push_u64(self.#field_ident);
         },
         "array" => {
             let _elem_type = subtype;
@@ -343,7 +343,7 @@ fn create_write(
                 }
             } else if _elem_type == "u8" {
                 quote! {
-                    doc.write_bytes(&self.#field_ident);
+                    doc.push(&self.#field_ident);
                 }
             } else {
                 panic!(
@@ -388,7 +388,8 @@ pub fn derive_data_io(input: TokenStream) -> TokenStream {
     // std::eprintln!("\nauto_reads: {:?}", auto_reads.len());
     // std::eprintln!("\nwrite: {:?}", write.len());
     let new_struct = quote! {
-        use bytebuffer::{ByteReader, ByteBuffer, Endian}; // Import ByteReader, ByteBuffer, and Endian for the generated code
+        use bytebuffer::{ByteReader, Endian}; // Import ByteReader, ByteBuffer, and Endian for the generated code
+        use kourain_core::BinaryBuilder; // Import BinaryBuilder for the generated code
         impl #struct_name {
             pub fn read(&mut self, bytes_rd: &mut ByteReader) {
                 if self.is_big_endian {
@@ -399,9 +400,12 @@ pub fn derive_data_io(input: TokenStream) -> TokenStream {
                 #(#auto_reads)*
             }
             pub fn write(&self) -> Vec<u8> {
-                let mut doc = ByteBuffer::new();
+                self.write_with_capacity(512) // You can adjust the initial capacity as needed
+            }
+            pub fn write_with_capacity(&self, capacity: usize) -> Vec<u8> {
+                let mut doc = BinaryBuilder::with_capacity(capacity);
                 #(#write)*
-                doc.into_vec()
+                doc.to_array()
             }
         }
     };

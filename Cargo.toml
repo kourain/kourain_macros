@@ -2,7 +2,7 @@ ccargo-features = ["open-namespaces"]
 
 [package]
 name = "kourain_macro"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2024"
 authors = ["kourain <maiquyen16503@gmail.com>"]
 license = "MIT OR Apache-2.0"
@@ -17,6 +17,7 @@ categories = ["command-line-utilities"]
 proc-macro = true
 
 [dependencies]
+kourain_core = "1"
 syn = { version = "2" }
 quote = "1"
 proc-macro2 = "1"
